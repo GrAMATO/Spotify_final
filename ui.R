@@ -14,7 +14,7 @@ navbarPage("Recommandation Playlist Spotify",
              "",
              fluidPage(
              theme = shinytheme('darkly'),
-             includeCSS("www/styles.css"),),
+             includeCSS("styles.css"),),
                     tags$head(
                       tags$style(type = 'text/css', '.navbar { background-color: #262626;
                                                font-family: Arial;
