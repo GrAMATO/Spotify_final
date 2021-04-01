@@ -1,4 +1,3 @@
-# Import R packages needed for the app here:
 library(shiny)
 library(DT)
 library(RColorBrewer)
@@ -8,13 +7,13 @@ library(dplyr)
 library(readr)
 library(shinyalert)
 
-# Define any Python packages needed for the app here:
+
 PYTHON_DEPENDENCIES = c('pip', 'numpy','pandas')
 
-# Begin app server
+
 shinyServer(function(input, output) {
   
-  # ------------------ App virtualenv setup (Do not edit) ------------------- #
+  # ------------------ App virtualenv setup  ------------------- #
   
   virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
   python_path = Sys.getenv('PYTHON_PATH')
@@ -24,13 +23,9 @@ shinyServer(function(input, output) {
   reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
   reticulate::use_virtualenv(virtualenv_dir, required = T)
   
-  # ------------------ App server logic (Edit anything below) --------------- #
+  # ------------------ App server logic  --------------- #
   
-  plot_cols <- brewer.pal(11, 'Spectral')
   
-  # Import python functions to R
-
-  #reticulate::
   source_python('opti.py')
   
   moyennes_playlists <- read_csv('moyennes_playlists.csv')
@@ -38,7 +33,7 @@ shinyServer(function(input, output) {
   data_analyse <- read_csv("data_analyse.csv")
   data_tracks_final <- read_csv("data_tracks_final.csv")
   
-  # Generate the requested distribution
+
   data <- reactive({
     df <- final_opti(input$valence, input$danceability, input$energy,
                input$acousticness,"peu_importe", input$instrumentalness)
