@@ -102,7 +102,7 @@ class SpotifyAPI(object):
         return token
     
     
-def get_playlists(): 
+def get_playlists(spoti): 
     """Récupère les playlists"""
     access_token = access_token_build()
     dict_playlists = {"names":[], "description":[], "url":[], "id":[], "image":[], "public":[]} 
@@ -151,7 +151,7 @@ def get_playlists():
             return dict_playlists
     return dict_playlists
     
-def get_tracks(data_playlists):
+def get_tracks(spoti, data_playlists):
     access_token = access_token_build()
     dict_tracks = {"playlist_id":[], "track_id":[], "popularity":[], "track_url":[], "artist":[]} 
     headers = {
@@ -199,7 +199,7 @@ def get_tracks(data_playlists):
             pass
     return dict_tracks
 
-def analyse_tracks(data_tracks):
+def analyse_tracks(spoti, data_tracks):
     access_token = access_token_build()
     df_analyse = pd.DataFrame()
     headers = {
@@ -237,8 +237,12 @@ def access_token_build(client_id, client_secret):
     
       
 
-client_id = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
-client_secret = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
+client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
+client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
+
+spoti = SpotifyAPI_new(client_id, client_secret)
+
+
 
 USER = "GrAMATO"
 REPO = "Spotify_final"
@@ -248,7 +252,7 @@ TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
 
 #### Récupération des playlists
 
-playlists_df = pd.DataFrame(get_playlists())
+playlists_df = pd.DataFrame(get_playlists(spoti))
 
 #### Déplacement du fichier précédent dans une archive
 
