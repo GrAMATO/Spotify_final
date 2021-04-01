@@ -251,7 +251,7 @@ TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
 
 #### Récupération des playlists
 
-playlists_df = pd.DataFrame(get_playlists(spoti))
+playlists_df = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
 
 #### Déplacement du fichier précédent dans une archive
 
