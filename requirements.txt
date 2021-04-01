@@ -1,0 +1,9 @@
+requests==2.25.1
+json
+pandas as pd
+base64
+datetime
+urllib
+time
+base64
+io
