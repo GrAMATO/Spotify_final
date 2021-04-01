@@ -15,6 +15,7 @@ def get_sha(user, repo, filepos):
     """Permet de générer le token 'sha' d'un fichier, prend en entrée le nom du compte github, le nom du repo et le nom du fichier, 
     renvoie une str comprenant le 'sha'."""
     login2 = requests.get('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + filepos)
+    print(login2.json())
     return login2.json()["sha"]
 
 def encode_file(file_to_encode):
