@@ -1,6 +1,6 @@
 requests==2.25.1
 json
-pandas as pd
+pandas
 base64
 datetime
 urllib
