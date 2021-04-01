@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 import time
 import base64
 import io
+from boto.s3.connection import S3Connection
 
 
 def get_sha(user, repo, filepos):
@@ -233,12 +234,14 @@ def access_token_build(client_id, client_secret):
     spoti = SpotifyAPI(client_id, client_secret)
     return spoti.get_access_token()
     
-client_id = ACCOUNT_API_REPO_KEY
-client_secret = ACCOUNT_API_REPO_SECRET
+      
+
+client_id = S3Connection(os.environ['ACCOUNT_API_REPO_KEY']
+client_secret = S3Connection(os.environ['ACCOUNT_API_REPO_SECRET']
 
 USER = "GrAMATO"
 REPO = "Spotify_final"
-TOKEN = TOKEN_REPO_ACCESS
+TOKEN = S3Connection(os.environ['TOKEN_REPO_ACCESS']
 
 
 
