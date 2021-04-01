@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 import time
 import base64
 import io
+import os
 from boto.s3.connection import S3Connection
 
 
