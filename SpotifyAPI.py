@@ -240,7 +240,7 @@ def access_token_build(client_id, client_secret):
 client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
 client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
 
-spoti = SpotifyAPI(client_id, client_secret)
+spoti = SpotifyAPI(client_id_spoti, client_secret_spoti)
 
 
 
