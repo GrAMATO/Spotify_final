@@ -237,13 +237,12 @@ def access_token_build(client_id, client_secret):
     
       
 
-client_id = S3Connection(os.environ['ACCOUNT_API_REPO_KEY'])
-client_secret = S3Connection(os.environ['ACCOUNT_API_REPO_SECRET'])
+client_id = str(os.environ.get("ACCOUNT_API_REPO_KEY")))   
+client_secret = str(os.environ.get("ACCOUNT_API_REPO_SECRET")))  
 
 USER = "GrAMATO"
 REPO = "Spotify_final"
-TOKEN = S3Connection(os.environ['TOKEN_REPO_ACCESS'])
-
+TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))) 
 
 
 
