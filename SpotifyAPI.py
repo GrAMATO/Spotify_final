@@ -15,7 +15,6 @@ def get_sha(user, repo, filepos):
     """Permet de générer le token 'sha' d'un fichier, prend en entrée le nom du compte github, le nom du repo et le nom du fichier, 
     renvoie une str comprenant le 'sha'."""
     login2 = requests.get('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + filepos)
-    print(login2.json())
     return login2.json()["sha"]
 
 def encode_file(file_to_encode):
@@ -269,7 +268,7 @@ update_file(USER, REPO, filepos, TOKEN, sha, encodedfile)
 
 #### Remplacement des nouvelles données (Remplace dans un autre dossier pour le moment)
 
-data_playlists_new = pd.DataFrame(get_playlists())
+data_playlists_new = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
 
 filepos = "Testfolder/data_playlists.csv"
 sha = get_sha(USER, REPO, filepos)
