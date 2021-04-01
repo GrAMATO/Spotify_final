@@ -1,9 +1,4 @@
 requests==2.25.1
-json
-pandas
-base64
-datetime
-urllib
-time
-base64
-io
+json==2.0.9
+pandas==1.1.3
+
