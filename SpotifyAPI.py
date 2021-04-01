@@ -260,7 +260,7 @@ url = "https://raw.githubusercontent.com/GrAMATO/Spotify_final/main/data_playlis
 download = requests.get(url).content
 df = pd.read_csv(io.StringIO(download.decode('utf-8')))
 
-filepos = "Archives/data_playlists_old.csv"
+filepos = "Archives_data/data_playlists_old.csv"
 sha = get_sha(USER, REPO, filepos)
 encodedfile = encode_file(df)
 
