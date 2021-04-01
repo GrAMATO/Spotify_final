@@ -102,9 +102,9 @@ class SpotifyAPI(object):
         return token
     
     
-def get_playlists(spoti): 
+def get_playlists(client_id_spoti, client_secret_spoti): 
     """Récupère les playlists"""
-    access_token = access_token_build()
+    access_token = access_token_build(client_id_spoti, client_secret_spoti)
     dict_playlists = {"names":[], "description":[], "url":[], "id":[], "image":[], "public":[]} 
     headers = {
       "Authorization": f"Bearer {access_token}"
@@ -151,8 +151,8 @@ def get_playlists(spoti):
             return dict_playlists
     return dict_playlists
     
-def get_tracks(spoti, data_playlists):
-    access_token = access_token_build()
+def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
+    access_token = access_token_build(client_id_spoti, client_secret_spoti)
     dict_tracks = {"playlist_id":[], "track_id":[], "popularity":[], "track_url":[], "artist":[]} 
     headers = {
       "Authorization": f"Bearer {access_token}"}
@@ -199,8 +199,8 @@ def get_tracks(spoti, data_playlists):
             pass
     return dict_tracks
 
-def analyse_tracks(spoti, data_tracks):
-    access_token = access_token_build()
+def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
+    access_token = access_token_build(client_id_spoti, client_secret_spoti)
     df_analyse = pd.DataFrame()
     headers = {
       "Authorization": f"Bearer {access_token}"}
@@ -240,7 +240,6 @@ def access_token_build(client_id, client_secret):
 client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
 client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
 
-spoti = SpotifyAPI(client_id_spoti, client_secret_spoti)
 
 
 
