@@ -237,12 +237,12 @@ def access_token_build(client_id, client_secret):
     
       
 
-client_id = str(os.environ.get("ACCOUNT_API_REPO_KEY")))   
-client_secret = str(os.environ.get("ACCOUNT_API_REPO_SECRET")))  
+client_id = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
+client_secret = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
 
 USER = "GrAMATO"
 REPO = "Spotify_final"
-TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))) 
+TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
 
 
 
