@@ -3,7 +3,7 @@ https://camillephilippe.shinyapps.io/recommandation-playlist-spotify/
 
 # Description rapide de l'application :
 
-L'application peut mettre quelques secondes avant de charger complètement.
+L'application peut mettre quelques secondes avant de charger complètement (au maximum une minute).
 ..........
 
 
