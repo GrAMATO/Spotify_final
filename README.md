@@ -3,7 +3,7 @@ https://camillephilippe.shinyapps.io/recommandation-playlist-spotify/
 
 # Description rapide de l'application :
 
-
+L'application peut mettre quelques secondes avant de charger complètement.
 ..........
 
 
@@ -15,5 +15,6 @@ https://camillephilippe.shinyapps.io/recommandation-playlist-spotify/
 
 # Ce qu'il reste à faire :
 
-..........
+- Terminer la mise à jour automatique des playlists, potentiellement mettre en place des sécurités. 
+- 
 
