@@ -16,5 +16,5 @@ L'application peut mettre quelques secondes avant de charger complètement (au m
 # Ce qu'il reste à faire :
 
 - Terminer la mise à jour automatique des playlists, potentiellement mettre en place des sécurités. 
-- 
+- Faire un beau readme pour expliquer le projet et son fonctionnement
 
