@@ -243,7 +243,7 @@ client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))
 
 
 
-USER = "GrAMATO"
+USER = "GregoireAMATO"
 REPO = "Spotify_final"
 TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
 
