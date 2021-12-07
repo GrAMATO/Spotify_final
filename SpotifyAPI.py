@@ -255,7 +255,7 @@ playlists_df = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
 
 #### Déplacement du fichier précédent dans une archive
 
-url = "https://raw.githubusercontent.com/GrAMATO/Spotify_final/main/data_playlists.csv" 
+url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data_playlists.csv" 
 download = requests.get(url).content
 df = pd.read_csv(io.StringIO(download.decode('utf-8')))
 
