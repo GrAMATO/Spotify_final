@@ -235,7 +235,7 @@ def access_token_build(client_id, client_secret):
     spoti = SpotifyAPI(client_id, client_secret)
     return spoti.get_access_token()
     
-def main_transfert(filenames, dict_sha):
+def main_transfert(filenames, dict_sha, USER, REPO, TOKEN):
     for filename in filenames:
         url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
         filepos = "Archives_data/{}_old.csv".format(filename)
@@ -251,9 +251,6 @@ def main():
     USER = "GregoireAMATO"
     REPO = "Spotify_final"
     TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
-    
-  
-
 
     #### Déplacement du fichier précédent dans une archive
  
@@ -262,7 +259,7 @@ def main():
     dict_sha = {i["name"].replace(".csv", ""):i["sha"] for i in sha}
     
     filenames = ["data_playlists", "data_tracks_final", "data_analyse"]
-    main_transfert(filenames, dict_sha )
+    main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
 
     print("OK")
     #### Remplacement des nouvelles données (Remplace dans un autre dossier pour le moment)
