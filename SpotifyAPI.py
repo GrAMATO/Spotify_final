@@ -11,11 +11,11 @@ import os
 from boto.s3.connection import S3Connection
 
 
-def get_sha(user, repo, filepos):
-    """Permet de générer le token 'sha' d'un fichier, prend en entrée le nom du compte github, le nom du repo et le nom du fichier, 
-    renvoie une str comprenant le 'sha'."""
+def get_all_sha(user, repo, filepos):
+    """Permet de générer le token 'sha' de tous les fichiers d'un dossier, prend en entrée le nom du compte github, le nom du repo et le nom du fichier, 
+    renvoie une liste comprenant les 'sha'."""
     login2 = requests.get('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + filepos)
-    return login2.json()["sha"]
+    return login2.json()
 
 def encode_file(file_to_encode):
     """Prend en entrée le fichier à encoder, le convertit en csv et renvoie le fichier crypté."""
@@ -28,7 +28,7 @@ def update_file(user, repo, filepos, token, sha, encodedfile):
     encodé en base64."""
     message = json.dumps({"message":"update",
                             "content": encodedfile ,
-                            "sha": get_sha(user, repo, filepos)
+                            "sha": sha
                             })
     headers = {'Authorization': 'token ' + token}
     login2 = requests.put('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + filepos , headers=headers, data=message)
@@ -235,46 +235,47 @@ def access_token_build(client_id, client_secret):
     spoti = SpotifyAPI(client_id, client_secret)
     return spoti.get_access_token()
     
+def main_transfert(filenames, dict_sha):
+    for filename in filenames:
+        url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
+        filepos = "Archives_data/{}_old.csv".format(filename)
+        download = requests.get(url).content
+        df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+        encodedfile = encode_file(df)
+        update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile)
 
 
-
-def main(filename):
-    client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))   
-    client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
+def main():
+    client_id_spoti = "3cb0361e67fc4ae8ac052aea630d70a3"
+    client_secret_spoti = "a13ee6894c0d496ebc7490f4d26e23e3"
     USER = "GregoireAMATO"
     REPO = "Spotify_final"
-    TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
-
-    #### Récupération des playlists
-
-    playlists_df = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
+    TOKEN = "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" 
 
     #### Déplacement du fichier précédent dans une archive
+ 
+    filepos = "data"#/{}_old.csv".format(filename)
+    sha = get_all_sha(USER, REPO, filepos)
+    dict_sha = {i["name"].replace(".csv", ""):i["sha"] for i in sha}
+    
+    filenames = ["data_playlists", "data_tracks_final", "data_analyse"]
+    main_transfert(filenames, dict_sha )
 
-    url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
-    download = requests.get(url).content
-    df = pd.read_csv(io.StringIO(download.decode('utf-8')))
-
-    filepos = "Archives_data/{}_old.csv".format(filename)
-    sha = get_sha(USER, REPO, filepos)
-    encodedfile = encode_file(df)
-
-
-    update_file(USER, REPO, filepos, TOKEN, sha, encodedfile)
-
+    print("OK")
     #### Remplacement des nouvelles données (Remplace dans un autre dossier pour le moment)
 
     data_playlists_new = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
+    data_data_tracks_final_new = pd.DataFrame(get_tracks(client_id_spoti, client_secret_spoti, data_playlists_new))
+    #data_moyennes_playlists_new = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
+    data_data_analyse_new = pd.DataFrame(analyse_tracks(client_id_spoti, client_secret_spoti, data_data_tracks_final_new))
 
-    filepos = "Testfolder/{}.csv".format(filename)
-    sha = get_sha(USER, REPO, filepos)
-    encodedfile_playlists = encode_file(playlists_df)
-
-
-    update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists)
+    dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new}
+    
+    for filename in filenames:
+        encodedfile_playlists = encode_file(dict_new_data[filename])
+        filepos = "Testfolder/{}.csv".format(filename)
+        update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists)
+    print("OK2")
 
     
-main("data_playlists")
-main("data_tracks_final")
-main("moyennes_playlists")
-main("data_analyse")
+main()
