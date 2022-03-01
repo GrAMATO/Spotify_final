@@ -246,11 +246,14 @@ def main_transfert(filenames, dict_sha):
 
 
 def main():
-    client_id_spoti = "3cb0361e67fc4ae8ac052aea630d70a3"
-    client_secret_spoti = "a13ee6894c0d496ebc7490f4d26e23e3"
+    client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
+    client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
     USER = "GregoireAMATO"
     REPO = "Spotify_final"
-    TOKEN = "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" 
+    TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
+    
+  
+
 
     #### Déplacement du fichier précédent dans une archive
  
