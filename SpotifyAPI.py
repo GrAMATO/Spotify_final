@@ -100,7 +100,9 @@ class SpotifyAPI(object):
             self.perform_auth()
             return self.get_access_token()
         return token
-    
+   
+  
+
     
 def get_playlists(client_id_spoti, client_secret_spoti): 
     """Récupère les playlists"""
@@ -150,6 +152,37 @@ def get_playlists(client_id_spoti, client_secret_spoti):
         except:
             return dict_playlists
     return dict_playlists
+
+def get_moyennes_playlists(data_playlists, tracks_playlist, data_analyse):
+    dict_playlists = {"names":[], "id":[], "url":[]} 
+    dict_playlists_test = {}
+    dict_playlists["names"].append(data_playlists["names"])
+    dict_playlists["id"].append(data_playlists["id"])
+    dict_playlists["url"].append(data_playlists["url"])
+    for i in ["valence", "danceability", "energy", "acousticness", "speechiness", "instrumentalness"]:
+        dict_playlists_test["mean_"+i] = []
+        dict_playlists_test["med_"+i] = []
+        dict_playlists_test["sd_"+i] = []
+        dict_playlists_test["quant1_"+i] = []
+        dict_playlists_test["quant3_"+i] = []
+    for playlist_id, playlist_name, playlist_url in zip(data_playlists["id"], data_playlists["names"], data_playlists["url"]):
+        tracks_playlist_clean = tracks_playlist[tracks_playlist["playlist_id"] == playlist_id]
+        track_playlist_detail = pd.merge(tracks_playlist_clean, data_analyse, left_on="track_id", right_on="id")
+        data_tracks_playlist_cleaned = track_playlist_detail[["playlist_id", "popularity", "valence", "danceability", "energy", "acousticness", "speechiness", "instrumentalness"]]
+        #["valence", "danceability", "energy", "acousticness", "speechiness", "instrumentalness"] #"names_playlist", "id_playlist", "url_playlist",
+        described_data = data_tracks_playlist_cleaned.describe()
+        for i in ["valence", "danceability", "energy", "acousticness", "speechiness", "instrumentalness"]:
+            dict_playlists_test["mean_"+i].append(described_data.loc["mean", i])
+            dict_playlists_test["med_"+i].append(described_data.loc["50%", i])
+            dict_playlists_test["sd_"+i].append(described_data.loc["std", i])
+            dict_playlists_test["quant1_"+i].append(described_data.loc["25%", i])
+            dict_playlists_test["quant3_"+i].append(described_data.loc["75%", i])
+    
+           
+    dict_final = {**dict_playlists, **dict_playlists_test}
+    for i in dict_playlists.keys():
+        dict_final[i] = dict_final[i][0]
+    return dict_final
     
 def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
     access_token = access_token_build(client_id_spoti, client_secret_spoti)
@@ -258,7 +291,7 @@ def main():
     sha = get_all_sha(USER, REPO, filepos)
     dict_sha = {i["name"].replace(".csv", ""):i["sha"] for i in sha}
     
-    filenames = ["data_playlists", "data_tracks_final", "data_analyse"]
+    filenames = ["data_playlists", "data_tracks_final", "data_analyse", "moyennes_playlists"]
     main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
 
     print("OK")
@@ -268,8 +301,9 @@ def main():
     data_data_tracks_final_new = pd.DataFrame(get_tracks(client_id_spoti, client_secret_spoti, data_playlists_new))
     #data_moyennes_playlists_new = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
     data_data_analyse_new = pd.DataFrame(analyse_tracks(client_id_spoti, client_secret_spoti, data_data_tracks_final_new))
+    data_moyennes_playlists_new = get_moyennes_playlists(data_playlists_new, data_data_tracks_final_new, data_data_analyse_new)
 
-    dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new}
+    dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new, "moyennes_playlists":data_moyennes_playlists_new}
     
     for filename in filenames:
         encodedfile_playlists = encode_file(dict_new_data[filename])
