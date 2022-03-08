@@ -233,29 +233,32 @@ def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
     return dict_tracks
 
 def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
-    access_token = access_token_build(client_id_spoti, client_secret_spoti)
+    access_token = spy.access_token_build(client_id_spoti, client_secret_spoti)
     df_analyse = pd.DataFrame()
+    #dict_verif = {}
     headers = {
       "Authorization": f"Bearer {access_token}"}
     for i in data_tracks["track_id"]:
-        dict_verif["verif"].append(i)
+        #dict_verif["verif"].append(i)
         endpoint = "https://api.spotify.com/v1/audio-features/" + str(i) 
         try:
             r = requests.get(endpoint, headers=headers) 
         except ConnectionError:
             time.sleep(10)
+            print("connection error")
             r = requests.get(endpoint, headers=headers) 
-        nb_track += 1
+        #nb_track += 1
         if str(r) == '<Response [401]>' :
                 print("access_token")
-                access_token = spoti.get_access_token() 
+                access_token = spy.access_token_build(client_id_spoti, client_secret_spoti)
                 headers = {
                   "Authorization": f"Bearer {access_token}"}
                 r = requests.get(endpoint, headers=headers)
         try:
             response_dict = json.loads(r.text)
             df_analyse = df_analyse.append(response_dict, ignore_index=True)
-            df_analyse.to_csv("data_analyse.csv")
+            print(df_analyse)
+            #df_analyse.to_csv("data_analyse.csv")
         except:
             pass
         
@@ -279,11 +282,11 @@ def main_transfert(filenames, dict_sha, USER, REPO, TOKEN):
 
 
 def main():
-    client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
-    client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
+    client_id_spoti = "3cb0361e67fc4ae8ac052aea630d70a3"#str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
+    client_secret_spoti = "a13ee6894c0d496ebc7490f4d26e23e3"#str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
     USER = "GregoireAMATO"
     REPO = "Spotify_final"
-    TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
+    TOKEN = "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"#str(os.environ.get("TOKEN_REPO_ACCESS"))
 
     #### Déplacement du fichier précédent dans une archive
  
@@ -312,4 +315,4 @@ def main():
     print("OK2")
 
     
-main()
+#main()
