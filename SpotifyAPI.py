@@ -126,7 +126,7 @@ def get_playlists(client_id_spoti, client_secret_spoti):
                 time.sleep(10)
                 r = requests.get(endpoint, headers=headers) 
             if str(r) == '<Response [401]>' :
-                access_token = spoti.get_access_token()
+                access_token = access_token_build(client_id_spoti, client_secret_spoti)
                 headers = {
                   "Authorization": f"Bearer {access_token}"}
                 r = requests.get(endpoint, headers=headers)
@@ -200,7 +200,7 @@ def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
             r = requests.get(endpoint, headers=headers) 
         if str(r) == '<Response [401]>' :
                 print("access_token")
-                access_token = spoti.get_access_token() 
+                access_token = access_token_build(client_id_spoti, client_secret_spoti)
                 headers = {
                   "Authorization": f"Bearer {access_token}"}
                 r = requests.get(endpoint, headers=headers)
@@ -233,7 +233,7 @@ def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
     return dict_tracks
 
 def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
-    access_token = spy.access_token_build(client_id_spoti, client_secret_spoti)
+    access_token = access_token_build(client_id_spoti, client_secret_spoti)
     df_analyse = pd.DataFrame()
     #dict_verif = {}
     headers = {
@@ -250,7 +250,7 @@ def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
         #nb_track += 1
         if str(r) == '<Response [401]>' :
                 print("access_token")
-                access_token = spy.access_token_build(client_id_spoti, client_secret_spoti)
+                access_token = access_token_build(client_id_spoti, client_secret_spoti)
                 headers = {
                   "Authorization": f"Bearer {access_token}"}
                 r = requests.get(endpoint, headers=headers)
@@ -278,15 +278,16 @@ def main_transfert(filenames, dict_sha, USER, REPO, TOKEN):
         download = requests.get(url).content
         df = pd.read_csv(io.StringIO(download.decode('utf-8')))
         encodedfile = encode_file(df)
-        update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile)
+        print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile))
+        print(filename + " archived!")
 
 
 def main():
-    client_id_spoti = "3cb0361e67fc4ae8ac052aea630d70a3"#str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
-    client_secret_spoti = "a13ee6894c0d496ebc7490f4d26e23e3"#str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
+    client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
+    client_secret_spoti = str(os.environ.get("ACCOUNT_API_REPO_SECRET"))  
     USER = "GregoireAMATO"
     REPO = "Spotify_final"
-    TOKEN = "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"#str(os.environ.get("TOKEN_REPO_ACCESS"))
+    TOKEN = str(os.environ.get("TOKEN_REPO_ACCESS"))
 
     #### Déplacement du fichier précédent dans une archive
  
@@ -311,8 +312,10 @@ def main():
     for filename in filenames:
         encodedfile_playlists = encode_file(dict_new_data[filename])
         filepos = "Testfolder/{}.csv".format(filename)
-        update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists)
+        print(update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists))
+        print(filename + " updated!")
     print("OK2")
 
+    # On peut potentiellement ajouter les nouveaux fichiers un par un plutôt que de faire une grosse boucle à la fin pour éviter les erreurs
     
-#main()
+main()
