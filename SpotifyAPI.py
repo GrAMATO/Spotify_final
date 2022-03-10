@@ -310,7 +310,9 @@ def main():
     dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new, "moyennes_playlists":data_moyennes_playlists_new}
     
     for filename in filenames:
-        encodedfile_playlists = encode_file(dict_new_data[filename])
+        file_to_encode = pd.DataFrame(dict_new_data[filename])
+        print(file_to_encode)
+        encodedfile_playlists = encode_file()
         filepos = "Testfolder/{}.csv".format(filename)
         print(update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists))
         print(filename + " updated!")
