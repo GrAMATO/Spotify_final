@@ -312,7 +312,7 @@ def main():
     for filename in filenames:
         file_to_encode = pd.DataFrame(dict_new_data[filename])
         print(file_to_encode)
-        encodedfile_playlists = encode_file()
+        encodedfile_playlists = encode_file(file_to_encode)
         filepos = "Testfolder/{}.csv".format(filename)
         print(update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists))
         print(filename + " updated!")
