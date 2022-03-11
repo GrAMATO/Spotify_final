@@ -123,8 +123,16 @@ def get_playlists(client_id_spoti, client_secret_spoti):
             try:
                 r = requests.get(url, headers=headers, params=params) 
             except:
-                time.sleep(10)
-                r = requests.get(endpoint, headers=headers) 
+                while True:
+                    try:
+                        time.sleep(10)
+                        access_token = access_token_build(client_id_spoti, client_secret_spoti)
+                        headers = {
+                          "Authorization": f"Bearer {access_token}"}
+                        r = requests.get(endpoint, headers=headers) 
+                        break
+                    except:
+                        print("error")
             if str(r) == '<Response [401]>' :
                 access_token = access_token_build(client_id_spoti, client_secret_spoti)
                 headers = {
@@ -196,8 +204,16 @@ def get_tracks(client_id_spoti, client_secret_spoti, data_playlists):
         try:
             r = requests.get(endpoint, headers=headers, params=params) 
         except ConnectionError:
-            time.sleep(10)
-            r = requests.get(endpoint, headers=headers) 
+            while True:
+                try:
+                    time.sleep(10)
+                    access_token = access_token_build(client_id_spoti, client_secret_spoti)
+                    headers = {
+                      "Authorization": f"Bearer {access_token}"}
+                    r = requests.get(endpoint, headers=headers) 
+                    break
+                except:
+                    print("error")
         if str(r) == '<Response [401]>' :
                 print("access_token")
                 access_token = access_token_build(client_id_spoti, client_secret_spoti)
@@ -244,9 +260,16 @@ def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
         try:
             r = requests.get(endpoint, headers=headers) 
         except ConnectionError:
-            time.sleep(10)
-            print("connection error")
-            r = requests.get(endpoint, headers=headers) 
+            while True:
+                try:
+                    time.sleep(10)
+                    access_token = access_token_build(client_id_spoti, client_secret_spoti)
+                    headers = {
+                      "Authorization": f"Bearer {access_token}"}
+                    r = requests.get(endpoint, headers=headers) 
+                    break
+                except:
+                    print("error")
         #nb_track += 1
         if str(r) == '<Response [401]>' :
                 print("access_token")
