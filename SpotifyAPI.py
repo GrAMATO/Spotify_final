@@ -304,6 +304,16 @@ def main_transfert(filenames, dict_sha, USER, REPO, TOKEN):
         print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile))
         print(filename + " archived!")
 
+def main_transfert2(filenames, dict_sha, USER, REPO, TOKEN):
+    for filename in filenames:
+        url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
+        filepos = "Testfolder/{}.csv".format(filename)
+        download = requests.get(url).content
+        df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+        encodedfile = encode_file(df)
+        print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile))
+        print(filename + " archived!")
+
 
 def main():
     client_id_spoti = str(os.environ.get("ACCOUNT_API_REPO_KEY"))  
@@ -334,16 +344,16 @@ def main():
     
     #### Validé, tout a fonctionné jusqu'ici
     print("I have all data")
+    filenames = ["data_analyse", "data_playlists", "data_tracks_final", "moyennes_playlists"]
+    filepos2 = "Testfolder"
+    sha2 = sp.get_all_sha(USER, REPO, filepos2)
+    dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
     for filename in filenames: 
         print(filename)
         file_to_encode = pd.DataFrame(dict_new_data[filename])
-        encodedfile_playlists = encode_file(file_to_encode)
-        filepos = "Testfolder/{}.csv".format(filename)
-        sha2 = get_all_sha(USER, REPO, filepos)
-        dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
-        
-        print(filename + " updated!")# rajouter code pour enregistrer le fichier dans le dossier
-    main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
+        encodedfile_playlists = sp.encode_file(file_to_encode)
+        print(filename + " updated!")
+    sp.main_transfert2(filenames, dict_sha2, USER, REPO, TOKEN )
     print("OK2")
 
     # On peut potentiellement ajouter les nouveaux fichiers un par un plutôt que de faire une grosse boucle à la fin pour éviter les erreurs
