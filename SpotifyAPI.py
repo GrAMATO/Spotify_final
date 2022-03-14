@@ -346,14 +346,14 @@ def main():
     print("I have all data")
     filenames = ["data_analyse", "data_playlists", "data_tracks_final", "moyennes_playlists"]
     filepos2 = "Testfolder"
-    sha2 = sp.get_all_sha(USER, REPO, filepos2)
+    sha2 = get_all_sha(USER, REPO, filepos2)
     dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
     for filename in filenames: 
         print(filename)
         file_to_encode = pd.DataFrame(dict_new_data[filename])
-        encodedfile_playlists = sp.encode_file(file_to_encode)
+        encodedfile_playlists = encode_file(file_to_encode)
         print(filename + " updated!")
-    sp.main_transfert2(filenames, dict_sha2, USER, REPO, TOKEN )
+    main_transfert2(filenames, dict_sha2, USER, REPO, TOKEN )
     print("OK2")
 
     # On peut potentiellement ajouter les nouveaux fichiers un par un plutôt que de faire une grosse boucle à la fin pour éviter les erreurs
