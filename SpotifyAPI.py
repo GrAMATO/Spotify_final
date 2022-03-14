@@ -332,12 +332,18 @@ def main():
 
     dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new, "moyennes_playlists":data_moyennes_playlists_new}
     
-    for filename in filenames:
+    #### Validé, tout a fonctionné jusqu'ici
+    print("I have all data")
+    for filename in filenames: 
+        print(filename)
         file_to_encode = pd.DataFrame(dict_new_data[filename])
         encodedfile_playlists = encode_file(file_to_encode)
         filepos = "Testfolder/{}.csv".format(filename)
-        print(update_file(USER, REPO, filepos, TOKEN, sha, encodedfile_playlists))
-        print(filename + " updated!")
+        sha2 = get_all_sha(USER, REPO, filepos)
+        dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
+        
+        print(filename + " updated!")# rajouter code pour enregistrer le fichier dans le dossier
+    main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
     print("OK2")
 
     # On peut potentiellement ajouter les nouveaux fichiers un par un plutôt que de faire une grosse boucle à la fin pour éviter les erreurs
