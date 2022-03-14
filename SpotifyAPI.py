@@ -280,7 +280,7 @@ def analyse_tracks(client_id_spoti, client_secret_spoti, data_tracks):
         try:
             response_dict = json.loads(r.text)
             df_analyse = df_analyse.append(response_dict, ignore_index=True)
-            print(df_analyse)
+            #print(df_analyse)
             #df_analyse.to_csv("data_analyse.csv")
         except:
             pass
