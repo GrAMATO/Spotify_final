@@ -336,6 +336,7 @@ def main():
     main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
 
     print("OK")
+    return 0
     #### Remplacement des nouvelles données (Remplace dans un autre dossier pour le moment)
 
     data_playlists_new = pd.DataFrame(get_playlists(client_id_spoti, client_secret_spoti))
