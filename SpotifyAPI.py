@@ -352,7 +352,7 @@ def main():
     for filename in filenames: 
         print(filename)
         filepos = "Testfolder"
-        sha2 = sp.get_all_sha(USER, REPO, filepos)
+        sha2 = get_all_sha(USER, REPO, filepos)
         dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
 
     main_transfert2(filenames, dict_new_data, dict_sha2, USER, REPO, TOKEN )
