@@ -295,24 +295,27 @@ def access_token_build(client_id, client_secret):
     return spoti.get_access_token()
     
 def main_transfert(filenames, dict_sha, USER, REPO, TOKEN):
+    filepos = "Archives_data"
+    sha = get_all_sha(USER, REPO, filepos)
+    dict_sha = {i["name"].replace(".csv", ""):i["sha"] for i in sha}
     for filename in filenames:
         url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
-        filepos = "Archives_data/{}_old.csv".format(filename)
+        #filepos = "data/{}.csv".format(filename)
         download = requests.get(url).content
         df = pd.read_csv(io.StringIO(download.decode('utf-8')))
         encodedfile = encode_file(df)
-        print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile))
+        filepos = "Archives_data/{}_old.csv".format(filename)
+        print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename+"_old"], encodedfile))
         print(filename + " archived!")
 
-def main_transfert2(filenames, dict_sha, USER, REPO, TOKEN):
+def main_transfert2(filenames, dict_new_data, dict_sha, USER, REPO, TOKEN):
     for filename in filenames:
-        url = "https://raw.githubusercontent.com/GregoireAMATO/Spotify_final/main/data/{}.csv".format(filename)
+        file_to_encode = pd.DataFrame(dict_new_data[filename])
+        encodedfile = encode_file(file_to_encode)
         filepos = "Testfolder/{}.csv".format(filename)
-        download = requests.get(url).content
-        df = pd.read_csv(io.StringIO(download.decode('utf-8')))
-        encodedfile = encode_file(df)
+        #print(dict_sha)
         print(update_file(USER, REPO, filepos, TOKEN, dict_sha[filename], encodedfile))
-        print(filename + " archived!")
+        print(filename + " updated!")   
 
 
 def main():
@@ -341,20 +344,20 @@ def main():
     data_moyennes_playlists_new = get_moyennes_playlists(data_playlists_new, data_data_tracks_final_new, data_data_analyse_new)
 
     dict_new_data = {"data_playlists":data_playlists_new, "data_tracks_final":data_data_tracks_final_new, "data_analyse":data_data_analyse_new, "moyennes_playlists":data_moyennes_playlists_new}
-    
     #### Validé, tout a fonctionné jusqu'ici
+    ### Revoir la récupération et l'enregistrement des données
     print("I have all data")
-    filenames = ["data_analyse", "data_playlists", "data_tracks_final", "moyennes_playlists"]
-    filepos2 = "Testfolder"
-    sha2 = get_all_sha(USER, REPO, filepos2)
-    dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
+    dict_sha2 = {}
     for filename in filenames: 
         print(filename)
-        file_to_encode = pd.DataFrame(dict_new_data[filename])
-        encodedfile_playlists = encode_file(file_to_encode)
-        print(filename + " updated!")
-    main_transfert2(filenames, dict_sha2, USER, REPO, TOKEN )
+        filepos = "Testfolder"
+        sha2 = sp.get_all_sha(USER, REPO, filepos)
+        dict_sha2 = {i["name"].replace(".csv", ""):i["sha"] for i in sha2}
+
+    main_transfert2(filenames, dict_new_data, dict_sha2, USER, REPO, TOKEN )
     print("OK2")
+    
+    
 
     # On peut potentiellement ajouter les nouveaux fichiers un par un plutôt que de faire une grosse boucle à la fin pour éviter les erreurs
     
