@@ -332,6 +332,7 @@ def main():
     dict_sha = {i["name"].replace(".csv", ""):i["sha"] for i in sha}
     
     filenames = ["data_playlists", "data_tracks_final", "data_analyse", "moyennes_playlists"]
+    filepos = "Archives_data"
     main_transfert(filenames, dict_sha, USER, REPO, TOKEN )
 
     print("OK")
