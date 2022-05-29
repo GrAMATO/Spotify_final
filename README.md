@@ -17,12 +17,6 @@ Vous pouvez sélectionner les caractéristiques souhaitées de la playlist et l'
 
 # Description du fonctionnement de l'application (récupération des données, traitement)
 
-..........
+Nous récupérons directement les données depuis l'API de Spotify grâce à un script Python, qui va donc extraire toutes les playlists disponibles. Pour chaque playlist, il faut ensuite extraire la liste de chaque chanson et la liste des caractéristiques de chaque chanson. Une fois ces données récupérées, nous effectuons une optimisation sous contrainte avec pour contrainte les inputs spécifiés par l'utilisateur. La liste finale des playlists sélectionnées est alors renvoyée sur la partie "front end" gérée par Shiny.
 
-
-
-# Ce qu'il reste à faire :
-
-- Terminer la mise à jour automatique des playlists, potentiellement mettre en place des sécurités. 
-- Faire un beau readme pour expliquer le projet et son fonctionnement
-
+Afin de maintenir les données à jour, nous avons également mis au point un système consistant à utiliser l'API de GitHub afin de s'en servir comme d'une base de données. Ainsi, le script python est stocké sur Heroku et déclenché automatiquement une fois par jour pour récupérer les données. Ensuite, grâce à l'API de GitHub, les données précédentes sont transférées dans un dossier "Archive" afin d'en conserver une trace, puis les nouvelles données sont transférées dans le dossier "data".  
