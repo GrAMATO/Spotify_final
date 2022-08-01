@@ -1,5 +1,5 @@
-# Objectives
-The main objective of the project was to build an application to generate spotify playlists according to some criteria. 
+# Goals
+The main goals of this project was to build an application to generate spotify playlists according to some criteria. 
 Another "technical" objective was to test the R/Python interconnectivity, and thus to build an application using both. 
 
 # Quick description of the application:
@@ -20,8 +20,6 @@ In order to keep the data up to date, we have also developed a system that uses 
 
 URL to the app:
 https://camillephilippe.shinyapps.io/recommandation-playlist-spotify/
-
-
 
 
 
